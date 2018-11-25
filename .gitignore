@@ -10,3 +10,5 @@
 /DotNet/DotNetRecruit/obj/Debug
 /DotNet/.vs/DotNetRecruit/v15/Server/sqlite3
 /.vs
+/DotNet/packages/NUnit.3.11.0/lib
+/DotNet/packages/NUnit.3.11.0

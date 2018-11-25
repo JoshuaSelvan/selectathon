@@ -81,11 +81,10 @@
         private int AnagramCounterOnSortedList(List<string> wordList)
         {
             int resultCount = 0;
-            Console.WriteLine("length of wordlist: {0}", wordList.Count);
             if (wordList.Count > 0)
             {
                 var currentEntry = wordList[0];
-                for (int i = 1; i < wordList.Count - 1; i++)
+                for (int i = 1; i < wordList.Count; i++)
                 {
                     if (currentEntry.SequenceEqual(wordList[i]) != true)
                         currentEntry = wordList[i];
