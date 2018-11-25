@@ -9,37 +9,29 @@
     {
         public IEnumerable<AnagramCounter> Compute(string dictionaryLocation)
         {
-            //var words = File.ReadAllLines(dictionaryLocation);
 
             var wordListsByLength = ReadAllSortedLinesToLengthLists(dictionaryLocation);
-
-           /*
-            foreach (var word in wordListsByLength[3])
-            {
-                Console.WriteLine("saved word: {0}", word);
-            }*/
-
-            //var input = Console.ReadLine();
+            SortWordLists(ref wordListsByLength);
 
             var anagramCounter = new List<AnagramCounter>
                        {
-                           new AnagramCounter { WordLength = 1, Count = SimpleAnagramCounter(wordListsByLength[0]) },
-                           new AnagramCounter { WordLength = 2, Count = SimpleAnagramCounter(wordListsByLength[1]) },
-                           new AnagramCounter { WordLength = 3, Count = SimpleAnagramCounter(wordListsByLength[2]) },
-                           new AnagramCounter { WordLength = 4, Count = SimpleAnagramCounter(wordListsByLength[3]) },
-                           new AnagramCounter { WordLength = 5, Count = SimpleAnagramCounter(wordListsByLength[4]) },
-                           new AnagramCounter { WordLength = 6, Count = SimpleAnagramCounter(wordListsByLength[5]) },
-                           new AnagramCounter { WordLength = 7, Count = SimpleAnagramCounter(wordListsByLength[6]) },
-                           new AnagramCounter { WordLength = 8, Count = SimpleAnagramCounter(wordListsByLength[7]) },
-                           new AnagramCounter { WordLength = 9, Count = SimpleAnagramCounter(wordListsByLength[8]) },
-                           new AnagramCounter { WordLength = 10, Count = SimpleAnagramCounter(wordListsByLength[9]) }
+                           new AnagramCounter { WordLength = 1, Count = AnagramCounterOnSortedList(wordListsByLength[0]) },
+                           new AnagramCounter { WordLength = 2, Count = AnagramCounterOnSortedList(wordListsByLength[1]) },
+                           new AnagramCounter { WordLength = 3, Count = AnagramCounterOnSortedList(wordListsByLength[2]) },
+                           new AnagramCounter { WordLength = 4, Count = AnagramCounterOnSortedList(wordListsByLength[3]) },
+                           new AnagramCounter { WordLength = 5, Count = AnagramCounterOnSortedList(wordListsByLength[4]) },
+                           new AnagramCounter { WordLength = 6, Count = AnagramCounterOnSortedList(wordListsByLength[5]) },
+                           new AnagramCounter { WordLength = 7, Count = AnagramCounterOnSortedList(wordListsByLength[6]) },
+                           new AnagramCounter { WordLength = 8, Count = AnagramCounterOnSortedList(wordListsByLength[7]) },
+                           new AnagramCounter { WordLength = 9, Count = AnagramCounterOnSortedList(wordListsByLength[8]) },
+                           new AnagramCounter { WordLength = 10, Count = AnagramCounterOnSortedList(wordListsByLength[9]) }
                        };
-
 
             return anagramCounter;
         }
 
 
+        //Reads in the words from the file and presorts them into alphabetical order
         private List<List<string>> ReadAllSortedLinesToLengthLists(string dictionaryLocation)
         {
             var ListOfWordLists = new List<List<string>>();
@@ -75,57 +67,35 @@
 
             return ListOfWordLists;
         }
-        
-        
-       private int SimpleAnagramCounter(/*AnagramCounter results,*/ List<string> wordList)
-       {
-            int resultsCount = 0;
-            var orderedA = "";
-            for (int i = 0; i < wordList.Count - 1; i++)
-            {
-                if (wordList[i] != null)
-                {
-                    orderedA = wordList[i];
-                    for (int j = i + 1; j < wordList.Count; j++)
-                    {
-                        //Second if statement condition should only be evaluated if the first doesnt fail
 
-                        //Console.WriteLine("Comparing {0} -> {1}", orderedA, wordList[j]);
-                        if (wordList[j] != null && orderedA.SequenceEqual(wordList[j]))
-                        {
-                            //Console.WriteLine("Match!! {0} -> {1}", orderedA, wordList[j]);
-                            //Console.WriteLine("result count: {0}", results.Count);
-                            resultsCount++;
-                            wordList[j] = null;
-                        }
-                        
-                    }
-                }
-            }
-
-            return resultsCount;
-       }
-
-
-        //Simple approach using LINQ and lambda functions to check if two strings are equal.
-        private bool IsAnagramSimple(string a, string b)
+        //Sorts a list of words by alphabetical order
+        private void SortWordLists(ref List<List<string>> listSet)
         {
-            return a.OrderBy(c => c).SequenceEqual(b.OrderBy(c => c));
+            foreach (var list in listSet)
+            {
+                list.Sort();
+            }
         }
 
-        //Method which builds up a dictionary for an entry. May be faster if the dictionary value is stored instead of reprocessed
-        private Dictionary<char, int> CalculateFrequency(string input)
+        //Counts the number of identical words in a sorted list with a single runthrough
+        private int AnagramCounterOnSortedList(List<string> wordList)
         {
-            var frequency = new Dictionary<char, int>();
-            foreach (var c in input)
+            int resultCount = 0;
+            Console.WriteLine("length of wordlist: {0}", wordList.Count);
+            if (wordList.Count > 0)
             {
-                if (!frequency.ContainsKey(c))
+                var currentEntry = wordList[0];
+                for (int i = 1; i < wordList.Count - 1; i++)
                 {
-                    frequency.Add(c, 0);
+                    if (currentEntry.SequenceEqual(wordList[i]) != true)
+                        currentEntry = wordList[i];
+                    else
+                        resultCount++;
                 }
-                ++frequency[c];
             }
-            return frequency;
+            return resultCount;
         }
+
+
     }
 }
